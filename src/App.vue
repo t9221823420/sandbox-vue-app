@@ -1,28 +1,64 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <v-app id="sandbox" :dark="dark">
+        <v-navigation-drawer
+                v-model="primaryDrawer.model"
+                :permanent="primaryDrawer.type === 'permanent'"
+                :temporary="primaryDrawer.type === 'temporary'"
+                :clipped="primaryDrawer.clipped"
+                :floating="primaryDrawer.floating"
+                :mini-variant="primaryDrawer.mini"
+                absolute
+                overflow
+                app
+        >
+            <Menus/>
+        </v-navigation-drawer>
+        <v-toolbar :clipped-left="primaryDrawer.clipped" app absolute>
+            <v-toolbar-side-icon
+                    v-if="primaryDrawer.type !== 'permanent'"
+                    @click.stop="primaryDrawer.model = !primaryDrawer.model"
+            ></v-toolbar-side-icon>
+            <v-toolbar-title>Sanbox App</v-toolbar-title>
+        </v-toolbar>
+
+        <v-content>
+            <v-container>
+                <v-layout>
+                    <keep-alive>
+                        <router-view></router-view>
+                    </keep-alive>
+                </v-layout>
+            </v-container>
+        </v-content>
+
+        <v-footer :inset="footer.inset" app>
+            <span class="px-3">&copy; {{ new Date().getFullYear() }}</span>
+        </v-footer>
+    </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+    import Menus from './components/layout/Menus';
+
+    export default {
+        name: 'App',
+        components: {
+            Menus
+        },
+        data: () => ({
+            dark: true,
+            drawers: ['Default (no property)', 'Permanent', 'Temporary'],
+            primaryDrawer: {
+                model: null,
+                type: 'default (no property)',
+                clipped: true,
+                floating: true,
+                mini: false
+            },
+            footer: {
+                inset: false
+            }
+        })
+    }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

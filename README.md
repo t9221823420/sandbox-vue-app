@@ -1,4 +1,4 @@
-# foo2
+# foo1
 
 ## Project setup
 ```
